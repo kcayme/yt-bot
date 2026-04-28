@@ -84,4 +84,7 @@ yt_bot/
   config.py      # Settings with .env overrides
   logger.py      # Logging setup
 tests/           # pytest suite
+docs/            # architecture & design notes
 ```
+
+For internals — threading model, retry/cancel coordination, shutdown flow — see [docs/architecture.md](docs/architecture.md).
