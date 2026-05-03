@@ -15,7 +15,7 @@ The `@ytbot` trigger must be present in your message; bare links are ignored. Th
 
 ## Requirements
 
-- Python 3.14+ (uses `uuid.uuid7()`)
+- Python 3.10+ (uses `uuid.uuid7()` on 3.14+, falls back to a timestamp-prefixed `uuid4` for chronological sort)
 - [uv](https://github.com/astral-sh/uv)
 
 ## Setup
