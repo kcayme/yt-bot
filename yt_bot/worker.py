@@ -54,11 +54,14 @@ def run_worker(
             try:
                 chat, urls, original_message = job_queue.get(timeout=0.5)
             except queue.Empty:
+                # skip on empty
                 continue
             except Exception:
+                # skip on error
                 logger.exception(
                     "Something went wrong ",
                 )
+                continue
 
             pool.submit(_run_job, client, chat, urls, original_message, job_queue, ctx)
 
