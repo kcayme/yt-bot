@@ -62,10 +62,8 @@ def run_worker(
                     _run_job, client, chat, urls, original_message, job_queue, ctx
                 )
             except queue.Empty:
-                # skip on empty
                 continue
             except Exception:
-                # skip on error
                 logger.exception(
                     "Something went wrong ",
                 )
