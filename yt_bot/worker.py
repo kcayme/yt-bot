@@ -93,11 +93,11 @@ def _run_job(
         future = executor.submit(
             _process_job, client, chat, urls, original_message, cancel
         )
-        future.result(timeout=config.JOB_TIMEOUT_MS)
+        future.result(timeout=config.JOB_TIMEOUT)
 
     except FuturesTimeoutError:
         cancel.set()
-        mins = config.JOB_TIMEOUT_MS // 60
+        mins = config.JOB_TIMEOUT // 60
 
         logger.error("Job timed out after %d minutes", mins)
 

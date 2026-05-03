@@ -47,7 +47,7 @@ SESSION_DB = _str("SESSION_DB", "session.db")
 DOWNLOAD_MAX_ATTEMPTS = _int("DOWNLOAD_MAX_ATTEMPTS", 3)
 DOWNLOAD_RETRY_BACKOFFS = _csv_int("DOWNLOAD_RETRY_BACKOFFS", [2, 8])
 DOWNLOAD_ATTEMPT_TIMEOUT = _int("DOWNLOAD_ATTEMPT_TIMEOUT", 600)
-JOB_TIMEOUT_MS = _int("JOB_TIMEOUT", 1800)
+JOB_TIMEOUT = _int("JOB_TIMEOUT", 1800)
 
 # Phone numbers (digits only, no +, spaces, or dashes) allowed to use the bot.
 # Override via .env: ALLOWED_SENDERS=11234312,41092103921
