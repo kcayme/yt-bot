@@ -7,6 +7,7 @@ from neonize.events import MessageEv
 from . import config
 from .downloader import fetch_title
 from .logger import get_logger
+from .worker import Job
 
 logger = get_logger(__name__)
 
@@ -22,7 +23,9 @@ _SHARE_GOOGLE_RE = re.compile(r"https?://share\.google/\S+")
 _TRIGGER_RE = re.compile(r"(?:^|\s)@ytbot\b", re.IGNORECASE)
 
 
-def on_message(client: NewClient, message: MessageEv, job_queue: queue.Queue) -> None:
+def on_message(
+    client: NewClient, message: MessageEv, job_queue: queue.Queue[Job]
+) -> None:
     if message.Info.MessageSource.IsGroup:
         return
 

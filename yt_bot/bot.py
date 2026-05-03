@@ -12,7 +12,7 @@ from neonize.events import ConnectedEv, MessageEv
 from . import config
 from .handler import on_message
 from .logger import get_logger
-from .worker import ShutdownContext, run_worker
+from .worker import Job, ShutdownContext, run_worker
 
 _SHUTDOWN_GRACE_SECONDS = 10
 
@@ -44,7 +44,7 @@ def main() -> None:
     temp.mkdir(exist_ok=True)
 
     # create in-memory queue
-    job_queue: queue.Queue = queue.Queue(maxsize=config.MAX_QUEUE_SIZE)
+    job_queue: queue.Queue[Job] = queue.Queue(maxsize=config.MAX_QUEUE_SIZE)
 
     # instantiate whatsapp
     wa_client = NewClient(config.SESSION_DB)

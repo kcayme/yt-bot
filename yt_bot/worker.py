@@ -4,8 +4,10 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 from pathlib import Path
+from typing import Any
 
 from neonize import NewClient
+from neonize.events import MessageEv
 
 from . import config
 from .downloader import download_all, infer_mimetype
@@ -13,6 +15,9 @@ from .logger import get_logger
 from .utils import new_id_hex
 
 logger = get_logger(__name__)
+
+# (chat JID, URLs to download, original message for replies/quoting)
+Job = tuple[Any, list[str], MessageEv]
 
 
 class ShutdownContext:
@@ -44,7 +49,7 @@ class ShutdownContext:
 
 def run_worker(
     client: NewClient,
-    job_queue: queue.Queue,
+    job_queue: "queue.Queue[Job]",
     ctx: ShutdownContext,
 ) -> None:
     """Continuously consumes jobs from the queue and processes them."""
@@ -53,6 +58,9 @@ def run_worker(
         while not ctx.shutdown.is_set():
             try:
                 chat, urls, original_message = job_queue.get(timeout=0.5)
+                pool.submit(
+                    _run_job, client, chat, urls, original_message, job_queue, ctx
+                )
             except queue.Empty:
                 # skip on empty
                 continue
@@ -63,15 +71,13 @@ def run_worker(
                 )
                 continue
 
-            pool.submit(_run_job, client, chat, urls, original_message, job_queue, ctx)
-
 
 def _run_job(
     client: NewClient,
     chat,
     urls: list[str],
     original_message,
-    job_queue: queue.Queue,
+    job_queue: "queue.Queue[Job]",
     ctx: ShutdownContext,
 ) -> None:
     cancel = threading.Event()
