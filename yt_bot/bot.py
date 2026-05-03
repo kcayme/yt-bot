@@ -59,6 +59,7 @@ def main() -> None:
 
     ctx = ShutdownContext()
 
+    # run worker thread
     threading.Thread(
         target=run_worker, args=(wa_client, job_queue, ctx), daemon=True
     ).start()
