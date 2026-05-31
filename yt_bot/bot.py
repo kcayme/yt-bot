@@ -12,7 +12,8 @@ from neonize.events import ConnectedEv, MessageEv
 from . import config
 from .handler import on_message
 from .logger import get_logger
-from .worker import Job, ShutdownContext, run_worker
+from .job import Job
+from .worker import ShutdownContext, run_worker
 
 _SHUTDOWN_GRACE_SECONDS = 10
 

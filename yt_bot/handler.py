@@ -7,7 +7,7 @@ from neonize.events import MessageEv
 from . import config
 from .downloader import fetch_title
 from .logger import get_logger
-from .worker import Job
+from .job import Job
 
 logger = get_logger(__name__)
 
@@ -64,11 +64,12 @@ def on_message(
 
         return
 
-    job_queue.put((chat, urls, message))
+    titles = [fetch_title(u) for u in urls]
+
+    job_queue.put((chat, urls, titles, message))
 
     logger.info("Queued %d URL(s)", len(urls))
 
-    titles = [fetch_title(u) for u in urls]
     lines = [f"{i}. {t}" if t else f"{i}. (unknown)" for i, t in enumerate(titles, 1)]
 
     client.reply_message(
